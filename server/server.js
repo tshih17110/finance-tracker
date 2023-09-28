@@ -8,5 +8,5 @@ const plaidRouter = require('./plaidRouter');
 app.use('/api', plaidRouter.router);
 
 app.listen(PORT, () => {
-    console.log(`Server running on ${PORT}`);
+	console.log(`Server running on ${PORT}`);
 });

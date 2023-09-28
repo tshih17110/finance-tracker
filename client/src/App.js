@@ -6,32 +6,32 @@ import Link from './components/Link';
 import Balance from './components/Balance';
 
 function App() {
-  return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route exact path="/link" element={<LinkPage/>} />
-          <Route path="/dashboard" element={<Dashboard/>} />
-        </Routes>
-      </div>
-    </Router>
-  );
+	return (
+		<Router>
+			<div className="App">
+				<Routes>
+					<Route exact path="/link" element={<LinkPage/>} />
+					<Route path="/dashboard" element={<Dashboard/>} />
+				</Routes>
+			</div>
+		</Router>
+	);
 }
 
 const LinkPage = () => {
-  return (
-    <div>
-      <Link />
-    </div>
-  );
+	return (
+		<div>
+			<Link />
+		</div>
+	);
 };
 
 const Dashboard = () => {
-  return (
-    <div>
-      <Balance />
-    </div>
-  );
+	return (
+		<div>
+			<Balance />
+		</div>
+	);
 };
 
 
