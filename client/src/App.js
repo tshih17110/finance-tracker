@@ -3,7 +3,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Link from './components/Link';
-import Balance from './components/Balance';
+import Dashboard from './components/Dashboard';
 
 function App() {
 	return (
@@ -11,7 +11,7 @@ function App() {
 			<div className="App">
 				<Routes>
 					<Route exact path="/link" element={<LinkPage/>} />
-					<Route path="/dashboard" element={<Dashboard/>} />
+					<Route path="/dashboard" element={<DashboardPage/>} />
 				</Routes>
 			</div>
 		</Router>
@@ -26,10 +26,10 @@ const LinkPage = () => {
 	);
 };
 
-const Dashboard = () => {
+const DashboardPage = () => {
 	return (
 		<div>
-			<Balance />
+            <Dashboard />
 		</div>
 	);
 };

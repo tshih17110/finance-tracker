@@ -64,7 +64,30 @@ async function getBalance(req, res) {
 	}
 }
 
+//Transactions sync
+async function transactionSync(req, res) {
+	try {
+		
+		//access_token, cursor, itemId
+		const plaidRequest = {
+			access_token: req.body.access_token,
+			cursor: req.body.cursor,
+			item_id: req.body.item_id,
+		}
+		const transactionsResponse = await client.transactionsSync(plaidRequest).catch((err) => {
+			console.log(err);
+		})
+		res.json({
+			transactions: transactionsResponse.data,
+		})
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+
 module.exports = {
+    transactionSync,
 	getBalance,
 	exchangePublicToken,
 	createLinkToken,
