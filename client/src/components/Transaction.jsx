@@ -15,7 +15,12 @@ function Transaction() {
 				const response = await axios.post("/api/transaction_sync", {
 					access_token: sessionStorage.getItem("accessToken"),
 				});		
-				setTransactions(response.data.transactions);
+                console.log(response.data.transactions);
+                const transactionsWithTypes = response.data.transactions.added.map(transaction => {
+                    transaction.type = transaction.amount >= 0 ? "withdrawal" : "deposit";
+                    return transaction;
+                });                
+                setTransactions(transactionsWithTypes);                
 				setIsLoading(false);
 			} catch (error) {
 				setIsLoading(false);
@@ -27,10 +32,12 @@ function Transaction() {
 
 	const groupedTransactions = {};
     if (!isTransactionLoading) {
-        transactions.added?.map(transaction => {
+        transactions?.map(transaction => {
 			if (!groupedTransactions.hasOwnProperty(transaction.account_id)) {
 				groupedTransactions[transaction.account_id] = [];
 			}
+            console.log(transaction.amount);
+            console.log(transaction);
 			groupedTransactions[transaction.account_id].push(transaction);
         });        
     }

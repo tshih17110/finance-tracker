@@ -1,0 +1,56 @@
+.dashboard-container {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    font-family: 'Roboto Mono';
+    padding: 20px;
+    height: 350px;
+    width: 90%;
+    margin: 20px auto 0 auto;
+    gap: 20px;
+    border-radius: 10px;
+    background-color: $dashboard-color;
+
+    ul {
+        list-style: none;
+        text-align: left;
+    }
+    
+    div {
+        background-color: $container-color;
+        // border-radius: 10px;
+        // box-shadow: 0 6px 20px $container-shadow;
+    }
+
+    .account-list {
+        width: 40%;
+        padding-right: 20px;
+        border-radius: 10px;
+        box-shadow: 0 6px 20px $container-shadow;
+    }
+
+    .selected-account {
+        font-weight: bold;
+    }
+    
+    .transaction-list {
+        width: 60%;
+        max-height: 100%;
+        border-radius: 10px;
+        box-shadow: 0 6px 20px $container-shadow;
+    }
+
+    .transaction-content {
+        // background-color: rgb(93, 93, 203);
+        overflow-y: scroll;
+        max-height: 75%;
+    }
+
+    .transaction {
+        display: flex;
+        justify-content: space-between;
+    }
+
+
+}
+
