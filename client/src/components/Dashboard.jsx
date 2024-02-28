@@ -50,9 +50,10 @@ function Dashboard() {
                             {groupedTransactions[currentOpenAccount].map((transaction, index) => (
                             <li key={index}>
                                 <div className="transaction">
+                                    <span className="transaction-date">{transaction.long_date}</span>
                                     <span className="transaction-name">{transaction.name}</span>
                                     <span className="transaction-amount">
-                                        {transaction.type === "withdrawal" ? "-" : ""}${parseFloat(Math.abs(transaction.amount)).toFixed(2)}</span>
+                                        {transaction.type === "withdrawal" ? "-" : ""}{transaction.currency_symbol}{parseFloat(Math.abs(transaction.amount)).toFixed(2)}</span>                                        
                                 </div>
                             </li>
                             ))}

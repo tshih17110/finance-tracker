@@ -5,19 +5,37 @@ function Transaction() {
 
 	const [transactions, setTransactions] = useState([]);
 	const [isTransactionLoading, setIsLoading] = useState(false);
+
+    const getCurrencySymbol = (isoCurrencyCode) => {
+        switch (isoCurrencyCode) {
+            case 'CAD':
+            case 'USD':
+                return '$';
+            case 'EUR':
+                return '€';
+            case 'GBP':
+                return '£';
+        }
+    }
+
+    const convertDateFormat = (inputDate) => {
+        const longDate = new Date(inputDate);
+        const options = { month: 'long', day: 'numeric', year: 'numeric' };
+        const formattedDate = longDate.toLocaleDateString(undefined, options);
+        return formattedDate;
+    }
     
 	useEffect(() => {
-		console.log("Transaction component is mounting/re-rendering...");
 		const fetchTransactions = async () => {
 			try {
-				console.log("FETCHING TRANSACTIONS...")
 				setIsLoading(true);
 				const response = await axios.post("/api/transaction_sync", {
 					access_token: sessionStorage.getItem("accessToken"),
-				});		
-                console.log(response.data.transactions);
+				});
                 const transactionsWithTypes = response.data.transactions.added.map(transaction => {
                     transaction.type = transaction.amount >= 0 ? "withdrawal" : "deposit";
+                    transaction.currency_symbol = getCurrencySymbol(transaction.iso_currency_code);
+                    transaction.long_date = convertDateFormat(transaction.date);
                     return transaction;
                 });                
                 setTransactions(transactionsWithTypes);                
@@ -36,11 +54,11 @@ function Transaction() {
 			if (!groupedTransactions.hasOwnProperty(transaction.account_id)) {
 				groupedTransactions[transaction.account_id] = [];
 			}
-            console.log(transaction.amount);
-            console.log(transaction);
+            transaction.amount = parseFloat(transaction.amount).toFixed(2);
 			groupedTransactions[transaction.account_id].push(transaction);
         });        
     }
+
 	
 	return {
 		transactions,
