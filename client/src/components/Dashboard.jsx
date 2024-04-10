@@ -1,6 +1,7 @@
 import Balance from './Balance';
 import Transaction from './Transaction';
-import Chart from './Chart';
+import ExpenseChart from './ExpenseChart';
+import CategoryChart from './CategoryChart';
 import React, { useState } from 'react';
 
 import '../styles/style.scss';
@@ -66,11 +67,20 @@ function Dashboard() {
 
                 <div className="chart-content">
                     {currentOpenAccount !== null && currentOpenAccount in groupedTransactions ? (
-                        <Chart transactions={groupedTransactions[currentOpenAccount]} />
+                        <ExpenseChart transactions={groupedTransactions[currentOpenAccount]} />
                         ) : (
                         <p>Select an account to view the chart.</p>
                     )}            
-                </div>            
+                </div>
+
+                <div className="category-content">
+                    {currentOpenAccount !== null && currentOpenAccount in groupedTransactions ? (
+                        <CategoryChart transactions={groupedTransactions[currentOpenAccount]} />
+                        ) : (
+                        <p>Select an account to view the transaction categories.</p>
+                    )}      
+                </div>
+
             </div>            
 
 

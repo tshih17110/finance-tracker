@@ -1,7 +1,7 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import '../styles/style.scss';
 
-const Chart = ({ transactions }) => {
+const ExpenseChart = ({ transactions }) => {
 
     const withdrawalData = transactions
         .filter(transaction => transaction.type === 'withdrawal')
@@ -13,11 +13,16 @@ const Chart = ({ transactions }) => {
     return (
         <LineChart
             width={600}
-            height={300}
+            height={360}
             data={withdrawalData}            
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+            margin={{ top: 5, right: 30, left: 30, bottom: 5 }}
         >
-        <XAxis dataKey="long_date" tick={{ fontSize: "12px" }}/>
+        <XAxis dataKey="short_date" 
+            tick={{ fontSize: "12px" }}
+            angle={ -45 }
+            textAnchor="end"
+            height={ 80 }
+            interval={ "equidistantPreserveStart" }/>
         <YAxis tick={{ fontSize: "12px" }} tickFormatter={(value) => `$${value}`}/>
         <CartesianGrid strokeDasharray="0" vertical={false}/>
         <Tooltip formatter={(value, name, props) => `${props.payload.currency_symbol}${value}`}/>
@@ -32,4 +37,4 @@ const Chart = ({ transactions }) => {
     );    
 }
 
-export default Chart;
+export default ExpenseChart;

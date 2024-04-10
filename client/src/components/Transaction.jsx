@@ -18,11 +18,12 @@ function Transaction() {
         }
     }
 
-    const convertDateFormat = (inputDate) => {
-        const longDate = new Date(inputDate);
-        const options = { month: 'long', day: 'numeric', year: 'numeric' };
-        const formattedDate = longDate.toLocaleDateString(undefined, options);
-        return formattedDate;
+    const convertDateFormat = (transaction) => {
+        const currentDate = new Date(transaction.date);
+        const shortOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+        const longOptions = { month: 'long', day: 'numeric', year: 'numeric' };
+        transaction.short_date = currentDate.toLocaleDateString(undefined, shortOptions);
+        transaction.long_date = currentDate.toLocaleDateString(undefined, longOptions);
     }
     
 	useEffect(() => {
@@ -35,7 +36,7 @@ function Transaction() {
                 const transactionsWithTypes = response.data.transactions.added.map(transaction => {
                     transaction.type = transaction.amount >= 0 ? "withdrawal" : "deposit";
                     transaction.currency_symbol = getCurrencySymbol(transaction.iso_currency_code);
-                    transaction.long_date = convertDateFormat(transaction.date);
+                    convertDateFormat(transaction);
                     return transaction;
                 });                
                 setTransactions(transactionsWithTypes);                
