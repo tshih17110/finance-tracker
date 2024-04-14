@@ -2,7 +2,9 @@ import Balance from './Balance';
 import Transaction from './Transaction';
 import ExpenseChart from './ExpenseChart';
 import CategoryChart from './CategoryChart';
-import React, { useState } from 'react';
+import AccountChart from './AccountChart';
+import React, { useState, useEffect } from 'react';
+import { isEqual } from 'lodash';
 
 import '../styles/style.scss';
 
@@ -11,13 +13,34 @@ function Dashboard() {
     const { balances, isBalanceLoading } = Balance();
     const { transactions, groupedTransactions, isTransactionLoading } = Transaction();
     const [ currentOpenAccount, setCurrentOpenAccount ] = useState(null);
+    const [ accountData, setAccountData ] = useState([]);
+    
+    useEffect(() => {
+        if (balances && balances.accounts && groupedTransactions) {
+            const data = balances.accounts.map(account => {
+                const accountId = account.account_id;
+                const accountTransactions = groupedTransactions[accountId] || [];
+                const totalWithdrawals = accountTransactions.reduce((sum, transaction) => {
+                    return transaction.type === 'withdrawal' ? sum + parseFloat(transaction.amount) : sum;
+                }, 0);
+                return {
+                    name: account.name,
+                    officialName: account.official_name,
+                    withdrawalSum: totalWithdrawals,
+                    
+                };
+            });
+            if (!isEqual(data, accountData)) {
+                setAccountData(data);
+            }
+        }
+    }, [balances, groupedTransactions, accountData]);
 
     const handleAccountClick = (account_id) => {
         setCurrentOpenAccount(account_id === currentOpenAccount ? null : account_id);
     };
 
     return (
-
         <div className="dashboard-container">
             <div className="sidebar">
                 <div className="account-list">
@@ -65,7 +88,7 @@ function Dashboard() {
                     </div>
                 </div>
 
-                <div className="chart-content">
+                <div className="expense-content">
                     {currentOpenAccount !== null && currentOpenAccount in groupedTransactions ? (
                         <ExpenseChart transactions={groupedTransactions[currentOpenAccount]} />
                         ) : (
@@ -73,13 +96,21 @@ function Dashboard() {
                     )}            
                 </div>
 
-                <div className="category-content">
-                    {currentOpenAccount !== null && currentOpenAccount in groupedTransactions ? (
-                        <CategoryChart transactions={groupedTransactions[currentOpenAccount]} />
-                        ) : (
-                        <p>Select an account to view the transaction categories.</p>
-                    )}      
+                <div className="pie-content">
+                    <div className="account-content">
+                        <AccountChart accounts={accountData}/>
+                    </div>
+
+                    <div className="category-content">
+                        {currentOpenAccount !== null && currentOpenAccount in groupedTransactions ? (
+                            <CategoryChart transactions={groupedTransactions[currentOpenAccount]} />
+                            ) : (
+                            <p>Select an account to view the transaction categories.</p>
+                        )}      
+                    </div>    
                 </div>
+                
+                
 
             </div>            
 

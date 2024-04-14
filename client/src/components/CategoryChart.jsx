@@ -1,4 +1,4 @@
-import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Label } from 'recharts';
 import '../styles/style.scss';
 
 const CategoryChart = ({ transactions }) => {
@@ -25,9 +25,11 @@ const CategoryChart = ({ transactions }) => {
         return acc;
     }, {});
 
+    const totalCount = Object.values(categoryCount).reduce((total, count) => total + count, 0);
+
     const pfcData = Object.keys(categoryCount).map(primary => ({
         name: primary,
-        value: categoryCount[primary],
+        value: (categoryCount[primary] / totalCount) * 100,
     }));
 
     const renderCustomizedTooltip = (props) => {
@@ -36,8 +38,8 @@ const CategoryChart = ({ transactions }) => {
         if (payload && payload.length) {
             const { name, value } = payload[0].payload;
             return (
-                <div className="pie-tooltip">
-                    <p>{cleanCategory(name)}: {value}</p>
+                <div className="category-tooltip">
+                    <p>{cleanCategory(name)}: {value.toFixed(2)}%</p>
                 </div>
             );
         }
@@ -46,13 +48,14 @@ const CategoryChart = ({ transactions }) => {
     };
 
     return (
-        <PieChart width={730} height={250}>
+        <PieChart width={250} height={250}>
             <Pie 
                 data={pfcData} 
                 dataKey="value" 
                 nameKey="name" 
                 cx="50%" 
                 cy="50%" 
+                innerRadius={80}
                 outerRadius={100} 
                 fill="#8884d8" 
                 label={false}
@@ -60,9 +63,14 @@ const CategoryChart = ({ transactions }) => {
                 {pfcData.map((entry, index) => (                    
                     <Cell key={`cell-${index}`} fill={categoryColors[index % categoryColors.length]} />
                 ))}
+                <Label value="Category Expenses" position="center" fill="black"/>
             </Pie>
-            <Tooltip content={renderCustomizedTooltip}/>
-            <Legend layout="vertical" verticalAlign="middle" align="right"/>
+            <Tooltip 
+                content={renderCustomizedTooltip}
+                wrapperStyle={{ backgroundColor: "white", 
+                                paddingLeft: "10px", 
+                                paddingRight: "10px",
+                                zIndex: 10}}/>
         </PieChart>
     )
     
